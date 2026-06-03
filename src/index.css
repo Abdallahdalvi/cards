@@ -683,6 +683,12 @@ textarea.form-input {
     gap: 8px;
   }
 
+  .header-actions .btn-outline,
+  .header-actions .btn-primary {
+    padding: 8px 12px;
+    gap: 6px;
+  }
+
   .hide-mobile {
     display: none !important;
   }

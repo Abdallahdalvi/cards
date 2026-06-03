@@ -269,8 +269,10 @@ const MainApp: React.FC<MainAppProps> = ({ userId }) => {
             <h1>Contacts</h1>
           </div>
           <div className="header-actions">
-            <button className="btn-outline hide-mobile" onClick={() => fileInputRef.current?.click()}>
-              <CloudUpload size={16} /> Batch Import
+            <button className="btn-outline" onClick={() => fileInputRef.current?.click()}>
+              <CloudUpload size={16} />
+              <span className="hide-mobile">Batch Import</span>
+              <span className="show-mobile">Import</span>
             </button>
             <input type="file" multiple ref={fileInputRef} hidden onChange={handleFileUpload} />
             <button className="btn-primary" onClick={() => {
