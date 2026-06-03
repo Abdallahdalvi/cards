@@ -54,3 +54,6 @@ drop policy if exists "Users can manage their own leads" on public.card_leads;
 create policy "Users can manage their own leads"
   on public.card_leads for all
   using (auth.uid() = owner_id);
+
+-- STEP 4: ALTER TABLE TO ADD NOTES COLUMN
+alter table public.card_leads add column if not exists notes text;

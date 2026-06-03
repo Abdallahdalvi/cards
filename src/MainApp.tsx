@@ -33,6 +33,7 @@ interface Lead {
   folder_id: string | null;
   owner_id: string;
   model_used: string;
+  notes?: string;
 }
 
 interface EventFolder {
@@ -77,7 +78,7 @@ const MainApp: React.FC<MainAppProps> = ({ userId }) => {
   const [reviewTargetFolder, setReviewTargetFolder] = useState<string>('');
   // Manual Create Contact
   const [showCreateModal, setShowCreateModal] = useState(false);
-  const [newContact, setNewContact] = useState({ name: '', company: '', role: '', email: '', phone: '', address: '' });
+  const [newContact, setNewContact] = useState({ name: '', company: '', role: '', email: '', phone: '', address: '', notes: '' });
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -89,6 +90,12 @@ const MainApp: React.FC<MainAppProps> = ({ userId }) => {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  const adjustHeight = (e: React.FormEvent<HTMLTextAreaElement>) => {
+    const el = e.currentTarget;
+    el.style.height = 'auto';
+    el.style.height = el.scrollHeight + 'px';
+  };
 
   // Init
   useEffect(() => {
@@ -193,7 +200,8 @@ const MainApp: React.FC<MainAppProps> = ({ userId }) => {
         scanDate: new Date().toISOString(),
         folder_id: activeEventId === 'all' ? null : activeEventId,
         owner_id: userId,
-        model_used: aiModel
+        model_used: aiModel,
+        notes: ''
       }));
       setReviewQueue(newItems);
     } catch (e: any) {
@@ -285,7 +293,7 @@ const MainApp: React.FC<MainAppProps> = ({ userId }) => {
             </button>
             <input type="file" multiple ref={fileInputRef} hidden onChange={handleFileUpload} />
             <button className="btn-primary" onClick={() => {
-              setNewContact({ name: '', company: '', role: '', email: '', phone: '', address: '' });
+              setNewContact({ name: '', company: '', role: '', email: '', phone: '', address: '', notes: '' });
               setShowCreateModal(true);
             }}>
               <Plus size={16} className="show-mobile" />
@@ -486,6 +494,17 @@ const MainApp: React.FC<MainAppProps> = ({ userId }) => {
                 <label className="form-label">Office Address</label>
                 <textarea className="form-input" value={editingLead.address} onChange={e => setEditingLead({ ...editingLead, address: e.target.value })} />
               </div>
+              <div className="form-group">
+                <label className="form-label">Notes</label>
+                <textarea
+                  className="form-input"
+                  style={{ minHeight: 60, resize: 'none', overflowY: 'hidden' }}
+                  placeholder="Notes about this contact..."
+                  value={editingLead.notes || ''}
+                  onInput={adjustHeight}
+                  onChange={e => setEditingLead({ ...editingLead, notes: e.target.value })}
+                />
+              </div>
             </div>
             <div className="flyout-footer">
               <button className="btn-outline" onClick={() => setEditingLead(null)}>Cancel</button>
@@ -553,6 +572,17 @@ const MainApp: React.FC<MainAppProps> = ({ userId }) => {
                     <div className="form-group" style={{ marginBottom: '4px' }}>
                       <label className="form-label" style={{ fontSize: '11px' }}>Address</label>
                       <input className="form-input" style={{ padding: '6px 10px' }} value={r.address || ''} onChange={e => { const n = [...reviewQueue]; n[i].address = e.target.value; setReviewQueue(n); }} />
+                    </div>
+                    <div className="form-group" style={{ marginBottom: '4px', marginTop: '12px' }}>
+                      <label className="form-label" style={{ fontSize: '11px' }}>Notes</label>
+                      <textarea
+                        className="form-input"
+                        style={{ padding: '6px 10px', minHeight: '44px', resize: 'none', overflowY: 'hidden' }}
+                        value={r.notes || ''}
+                        onInput={adjustHeight}
+                        onChange={e => { const n = [...reviewQueue]; n[i].notes = e.target.value; setReviewQueue(n); }}
+                        placeholder="Add notes..."
+                      />
                     </div>
                   </div>
                 ))}
@@ -705,6 +735,17 @@ const MainApp: React.FC<MainAppProps> = ({ userId }) => {
                 <label className="form-label">Address</label>
                 <textarea className="form-input" style={{ minHeight: 72, resize: 'vertical' }} placeholder="Office address..." value={newContact.address} onChange={e => setNewContact({ ...newContact, address: e.target.value })} />
               </div>
+              <div className="form-group">
+                <label className="form-label">Notes</label>
+                <textarea
+                  className="form-input"
+                  style={{ minHeight: 60, resize: 'none', overflowY: 'hidden' }}
+                  placeholder="Optional contact notes..."
+                  value={newContact.notes}
+                  onInput={adjustHeight}
+                  onChange={e => setNewContact({ ...newContact, notes: e.target.value })}
+                />
+              </div>
               <div className="form-group" style={{ marginBottom: 0 }}>
                 <label className="form-label">Save to Collection</label>
                 <select className="form-input" value={reviewTargetFolder} onChange={e => setReviewTargetFolder(e.target.value)}>
@@ -729,7 +770,8 @@ const MainApp: React.FC<MainAppProps> = ({ userId }) => {
                   scanDate: new Date().toISOString(),
                   folder_id: reviewTargetFolder || null,
                   owner_id: userId,
-                  model_used: 'Manual'
+                  model_used: 'Manual',
+                  notes: newContact.notes.trim()
                 };
                 const { error } = await supabase.from('card_leads').insert([record]);
                 if (!error) { setShowCreateModal(false); fetchData(); }
@@ -744,7 +786,7 @@ const MainApp: React.FC<MainAppProps> = ({ userId }) => {
       {isMobile && (
         <div className="mobile-fab-container">
           <button className="mobile-fab-btn fab-secondary" onClick={() => {
-            setNewContact({ name: '', company: '', role: '', email: '', phone: '', address: '' });
+            setNewContact({ name: '', company: '', role: '', email: '', phone: '', address: '', notes: '' });
             setShowCreateModal(true);
           }} title="Create Contact Manually">
             <Plus size={20} />
