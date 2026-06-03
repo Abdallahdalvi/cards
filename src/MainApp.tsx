@@ -1,4 +1,4 @@
-﻿import * as React from 'react';
+import * as React from 'react';
 import { useState, useEffect, useRef } from 'react';
 import {
   Trash2,
@@ -157,7 +157,7 @@ const MainApp: React.FC<MainAppProps> = ({ userId }) => {
       setIsProcessing(true);
 
       // Call backend proxy instead of directly calling AI APIs
-      const response = await fetch('http://localhost:3001/api/process-cards', {
+      const response = await fetch(import.meta.env.VITE_API_URL || '/api/process-cards', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
