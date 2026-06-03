@@ -444,23 +444,22 @@ const MainApp: React.FC<MainAppProps> = ({ userId }) => {
                 <p style={{ fontSize: 12, color: '#64748B', marginTop: 4 }}>Edit details below, then choose a collection to save into.</p>
               </div>
               {/* Collection picker inside the review modal */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <label style={{ fontSize: 12, fontWeight: 600, color: '#64748B', whiteSpace: 'nowrap' }}>Save to:</label>
+              <div className="review-save-to">
+                <label className="review-save-to-label">Save to:</label>
                 <select
-                  className="form-input"
-                  style={{ padding: '6px 10px', minWidth: 180 }}
+                  className="form-input review-save-to-select"
                   value={reviewTargetFolder}
                   onChange={e => setReviewTargetFolder(e.target.value)}
                 >
-                  <option value="">â˜ï¸ Universal Cloud (No folder)</option>
+                  <option value="">☁️ Universal Cloud (No folder)</option>
                   {events.map(ev => (
-                    <option key={ev.id} value={ev.id}>ðŸ“ {ev.name}</option>
+                    <option key={ev.id} value={ev.id}>📁 {ev.name}</option>
                   ))}
                 </select>
               </div>
             </div>
-            <div className="flyout-body" style={{ background: '#F8FAFC', padding: '24px' }}>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '16px' }}>
+            <div className="flyout-body review-modal-body">
+              <div className="review-grid">
                 {reviewQueue.map((r, i) => (
                   <div key={i} style={{ background: '#fff', border: '1px solid #E2E8F0', borderRadius: '6px', padding: '16px', position: 'relative' }}>
                     <button
@@ -583,7 +582,7 @@ const MainApp: React.FC<MainAppProps> = ({ userId }) => {
                 style={{ width: '100%', marginBottom: 8, justifyContent: 'flex-start', gap: 10 }}
                 onClick={() => bulkMove(null)}
               >
-                <LayoutGrid size={16} /> â˜ï¸ Universal Cloud (No folder)
+                <LayoutGrid size={16} /> ☁️ Universal Cloud (No folder)
               </button>
               {events.map(ev => (
                 <button
@@ -596,7 +595,7 @@ const MainApp: React.FC<MainAppProps> = ({ userId }) => {
                 </button>
               ))}
               {events.length === 0 && (
-                <p style={{ fontSize: 13, color: '#94A3B8', textAlign: 'center', padding: '16px 0' }}>No collections yet â€” create one first.</p>
+                <p style={{ fontSize: 13, color: '#94A3B8', textAlign: 'center', padding: '16px 0' }}>No collections yet — create one first.</p>
               )}
             </div>
             <div className="flyout-footer">
@@ -644,9 +643,9 @@ const MainApp: React.FC<MainAppProps> = ({ userId }) => {
               <div className="form-group" style={{ marginBottom: 0 }}>
                 <label className="form-label">Save to Collection</label>
                 <select className="form-input" value={reviewTargetFolder} onChange={e => setReviewTargetFolder(e.target.value)}>
-                  <option value="">â˜ï¸ Universal Cloud (No folder)</option>
+                  <option value="">☁️ Universal Cloud (No folder)</option>
                   {events.map(ev => (
-                    <option key={ev.id} value={ev.id}>ðŸ“ {ev.name}</option>
+                    <option key={ev.id} value={ev.id}>📁 {ev.name}</option>
                   ))}
                 </select>
               </div>

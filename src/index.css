@@ -738,3 +738,74 @@ textarea.form-input {
 .show-mobile {
   display: none;
 }
+
+/* Review Modal Responsiveness & Cleanup */
+.review-modal-body {
+  background: #F8FAFC;
+  padding: 24px;
+}
+
+.review-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+}
+
+.review-save-to {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.review-save-to-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  margin-bottom: 0;
+}
+
+.review-save-to-select {
+  padding: 6px 10px;
+  min-width: 180px;
+}
+
+@media (max-width: 768px) {
+  .modal-content.large .flyout-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px;
+  }
+
+  .review-save-to {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .review-save-to-select {
+    flex: 1;
+    max-width: 220px;
+  }
+
+  .review-modal-body {
+    padding: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .review-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .review-save-to {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+  
+  .review-save-to-select {
+    width: 100%;
+    max-width: 100%;
+  }
+}
