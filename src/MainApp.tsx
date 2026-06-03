@@ -359,7 +359,7 @@ const MainApp: React.FC<MainAppProps> = ({ userId }) => {
                   <td><div className="cell-text">{l.phone[0] || '-'}</div></td>
                   <td><div className="cell-text">{l.role || '-'}</div></td>
                   <td><div className="cell-text">{l.company || '-'}</div></td>
-                  <td><span className="badge">{l.model_used?.split('/').pop()}</span></td>
+                  <td><span className="badge">{l.model_used === 'Alpha' ? 'Dalvi 3.5' : l.model_used === 'Beta' ? 'Dalvi 5.5' : l.model_used?.split('/').pop()}</span></td>
                   <td>
                     <button className="icon-btn" onClick={(e) => { e.stopPropagation(); if (confirm('Delete?')) { supabase.from('card_leads').delete().eq('id', l.id).then(() => fetchData()); } }}>
                       <Trash2 size={16} />
@@ -393,7 +393,7 @@ const MainApp: React.FC<MainAppProps> = ({ userId }) => {
                 <div className="avatar" style={{ width: 48, height: 48, fontSize: 18 }}>{editingLead.name.charAt(0)}</div>
                 <div>
                   <div style={{ fontSize: 18, fontWeight: 600 }}>{editingLead.name}</div>
-                  <div style={{ fontSize: 13, color: '#64748B' }}>Scanned by {editingLead.model_used}</div>
+                  <div style={{ fontSize: 13, color: '#64748B' }}>Scanned by {editingLead.model_used === 'Alpha' ? 'Dalvi 3.5' : editingLead.model_used === 'Beta' ? 'Dalvi 5.5' : editingLead.model_used}</div>
                 </div>
               </div>
 
@@ -512,7 +512,7 @@ const MainApp: React.FC<MainAppProps> = ({ userId }) => {
           <div className="modal-content" style={{ padding: 32, alignItems: 'center', textAlign: 'center', maxWidth: 400 }}>
             <div style={{ width: 40, height: 40, border: '3px solid #E2E8F0', borderTopColor: '#2563EB', borderRadius: '50%', animation: 'spin 1s linear infinite', marginBottom: 16 }}></div>
             <h3 style={{ fontSize: 16, fontWeight: 600 }}>Analyzing Cards...</h3>
-            <p style={{ fontSize: 13, color: '#64748B', marginTop: 4 }}>Processing with {aiModel}</p>
+            <p style={{ fontSize: 13, color: '#64748B', marginTop: 4 }}>Processing with {aiModel === 'Alpha' ? 'Dalvi 3.5' : 'Dalvi 5.5'}</p>
           </div>
         </div>
       )}
@@ -528,8 +528,8 @@ const MainApp: React.FC<MainAppProps> = ({ userId }) => {
               <div className="form-group">
                 <label className="form-label">Active Analysis Engine</label>
                 <select className="form-input" value={aiModel} onChange={e => { setAiModel(e.target.value); localStorage.setItem('dalvicard_ai_selection', e.target.value); }}>
-                  <option value="Alpha">Alpha (OpenRouter - Gemini 3.5 Flash)</option>
-                  <option value="Beta">Beta (OpenRouter - GPT-5.5)</option>
+                  <option value="Alpha">Dalvi 3.5</option>
+                  <option value="Beta">Dalvi 5.5</option>
                 </select>
                 <p style={{ marginTop: 8, fontSize: 12, color: '#64748B' }}>
                   The API keys are already integrated into the application for your convenience.
