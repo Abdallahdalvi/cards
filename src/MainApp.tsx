@@ -529,7 +529,7 @@ const MainApp: React.FC<MainAppProps> = ({ userId }) => {
                 <label className="form-label">Active Analysis Engine</label>
                 <select className="form-input" value={aiModel} onChange={e => { setAiModel(e.target.value); localStorage.setItem('dalvicard_ai_selection', e.target.value); }}>
                   <option value="Alpha">Alpha (OpenRouter - Gemini Flash Latest)</option>
-                  <option value="Beta">Beta (OpenAI - GPT-4o)</option>
+                  <option value="Beta">Beta (OpenAI - GPT-5.5)</option>
                 </select>
                 <p style={{ marginTop: 8, fontSize: 12, color: '#64748B' }}>
                   The API keys are already integrated into the application for your convenience.
