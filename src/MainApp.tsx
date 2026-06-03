@@ -81,6 +81,15 @@ const MainApp: React.FC<MainAppProps> = ({ userId }) => {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Viewport detection state
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   // Init
   useEffect(() => {
     const m = localStorage.getItem('dalvicard_ai_selection');
@@ -328,49 +337,103 @@ const MainApp: React.FC<MainAppProps> = ({ userId }) => {
 
         {/* DATA TABLE */}
         <div className="table-container">
-          <table className="crm-table">
-            <thead>
-              <tr>
-                <th className="checkbox-cell">
-                  <input type="checkbox" className="checkbox-custom"
-                    checked={selectedLeadIds.size === filteredLeads.length && filteredLeads.length > 0}
-                    onChange={toggleSelectAll} />
-                </th>
-                <th style={{ width: '240px' }}>NAME</th>
-                <th style={{ width: '200px' }}>EMAIL</th>
-                <th style={{ width: '160px' }}>PHONE NUMBER</th>
-                <th style={{ width: '180px' }}>ROLE</th>
-                <th style={{ width: '180px' }}>ASSOCIATED COMPANY</th>
-                <th>AI MODEL</th>
-                <th style={{ width: '40px' }}></th>
-              </tr>
-            </thead>
-            <tbody>
+          {isMobile ? (
+            <div className="mobile-contact-list">
               {filteredLeads.map(l => (
-                <tr key={l.id} className={selectedLeadIds.has(l.id) ? 'selected' : ''} onClick={() => setEditingLead(l)}>
-                  <td className="checkbox-cell" onClick={(e) => toggleSelectLead(e, l.id)}>
-                    <input type="checkbox" className="checkbox-custom" checked={selectedLeadIds.has(l.id)} readOnly />
-                  </td>
-                  <td>
-                    <div className="name-cell">
-                      <div className="avatar">{l.name.charAt(0) || '?'}</div>
-                      <span className="name-text">{l.name || 'Unknown Contact'}</span>
+                <div key={l.id} className={`mobile-contact-card ${selectedLeadIds.has(l.id) ? 'selected' : ''}`} onClick={() => setEditingLead(l)}>
+                  <div className="mobile-card-header">
+                    <div className="mobile-avatar">{l.name.charAt(0) || '?'}</div>
+                    <div className="mobile-card-meta">
+                      <div className="mobile-card-name">{l.name || 'Unknown Contact'}</div>
+                      {l.role && <div className="mobile-card-role">{l.role}</div>}
                     </div>
-                  </td>
-                  <td><div className="cell-text">{l.email[0] || '-'}</div></td>
-                  <td><div className="cell-text">{l.phone[0] || '-'}</div></td>
-                  <td><div className="cell-text">{l.role || '-'}</div></td>
-                  <td><div className="cell-text">{l.company || '-'}</div></td>
-                  <td><span className="badge">{l.model_used === 'Alpha' ? 'Dalvi 3.5' : l.model_used === 'Beta' ? 'Dalvi 5.5' : l.model_used?.split('/').pop()}</span></td>
-                  <td>
-                    <button className="icon-btn" onClick={(e) => { e.stopPropagation(); if (confirm('Delete?')) { supabase.from('card_leads').delete().eq('id', l.id).then(() => fetchData()); } }}>
-                      <Trash2 size={16} />
-                    </button>
-                  </td>
-                </tr>
+                    <div className="mobile-card-checkbox" onClick={(e) => toggleSelectLead(e, l.id)}>
+                      <input type="checkbox" className="checkbox-custom" checked={selectedLeadIds.has(l.id)} readOnly />
+                    </div>
+                  </div>
+                  <div className="mobile-card-body">
+                    {l.company && (
+                      <div className="mobile-card-info-item">
+                        <span className="info-label">Company:</span> {l.company}
+                      </div>
+                    )}
+                    {l.email[0] && (
+                      <div className="mobile-card-info-item">
+                        <span className="info-label">Email:</span> {l.email[0]}
+                      </div>
+                    )}
+                    {l.phone[0] && (
+                      <div className="mobile-card-info-item">
+                        <span className="info-label">Phone:</span> {l.phone[0]}
+                      </div>
+                    )}
+                  </div>
+                  <div className="mobile-card-footer">
+                    <span className="badge">{l.model_used === 'Alpha' ? 'Dalvi 3.5' : l.model_used === 'Beta' ? 'Dalvi 5.5' : l.model_used?.split('/').pop()}</span>
+                    <div className="mobile-card-actions">
+                      {l.phone[0] && (
+                        <a href={`tel:${l.phone[0]}`} className="mobile-action-btn phone-btn" onClick={(e) => e.stopPropagation()}>
+                          📞
+                        </a>
+                      )}
+                      {l.email[0] && (
+                        <a href={`mailto:${l.email[0]}`} className="mobile-action-btn email-btn" onClick={(e) => e.stopPropagation()}>
+                          ✉️
+                        </a>
+                      )}
+                      <button className="mobile-action-btn delete-btn" onClick={(e) => { e.stopPropagation(); if (confirm('Delete?')) { supabase.from('card_leads').delete().eq('id', l.id).then(() => fetchData()); } }}>
+                        <Trash2 size={14} />
+                      </button>
+                    </div>
+                  </div>
+                </div>
               ))}
-            </tbody>
-          </table>
+            </div>
+          ) : (
+            <table className="crm-table">
+              <thead>
+                <tr>
+                  <th className="checkbox-cell">
+                    <input type="checkbox" className="checkbox-custom"
+                      checked={selectedLeadIds.size === filteredLeads.length && filteredLeads.length > 0}
+                      onChange={toggleSelectAll} />
+                  </th>
+                  <th style={{ width: '240px' }}>NAME</th>
+                  <th style={{ width: '200px' }}>EMAIL</th>
+                  <th style={{ width: '160px' }}>PHONE NUMBER</th>
+                  <th style={{ width: '180px' }}>ROLE</th>
+                  <th style={{ width: '180px' }}>ASSOCIATED COMPANY</th>
+                  <th>AI MODEL</th>
+                  <th style={{ width: '40px' }}></th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredLeads.map(l => (
+                  <tr key={l.id} className={selectedLeadIds.has(l.id) ? 'selected' : ''} onClick={() => setEditingLead(l)}>
+                    <td className="checkbox-cell" onClick={(e) => toggleSelectLead(e, l.id)}>
+                      <input type="checkbox" className="checkbox-custom" checked={selectedLeadIds.has(l.id)} readOnly />
+                    </td>
+                    <td>
+                      <div className="name-cell">
+                        <div className="avatar">{l.name.charAt(0) || '?'}</div>
+                        <span className="name-text">{l.name || 'Unknown Contact'}</span>
+                      </div>
+                    </td>
+                    <td><div className="cell-text">{l.email[0] || '-'}</div></td>
+                    <td><div className="cell-text">{l.phone[0] || '-'}</div></td>
+                    <td><div className="cell-text">{l.role || '-'}</div></td>
+                    <td><div className="cell-text">{l.company || '-'}</div></td>
+                    <td><span className="badge">{l.model_used === 'Alpha' ? 'Dalvi 3.5' : l.model_used === 'Beta' ? 'Dalvi 5.5' : l.model_used?.split('/').pop()}</span></td>
+                    <td>
+                      <button className="icon-btn" onClick={(e) => { e.stopPropagation(); if (confirm('Delete?')) { supabase.from('card_leads').delete().eq('id', l.id).then(() => fetchData()); } }}>
+                        <Trash2 size={16} />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
 
           {filteredLeads.length === 0 && (
             <div style={{ textAlign: 'center', padding: '64px', color: '#94A3B8' }}>
@@ -674,6 +737,21 @@ const MainApp: React.FC<MainAppProps> = ({ userId }) => {
               }}>Save Contact</button>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Floating Action Button (FAB) for Mobile */}
+      {isMobile && (
+        <div className="mobile-fab-container">
+          <button className="mobile-fab-btn fab-secondary" onClick={() => {
+            setNewContact({ name: '', company: '', role: '', email: '', phone: '', address: '' });
+            setShowCreateModal(true);
+          }} title="Create Contact Manually">
+            <Plus size={20} />
+          </button>
+          <button className="mobile-fab-btn fab-primary" onClick={() => fileInputRef.current?.click()} title="Scan/Import Card">
+            <CloudUpload size={20} />
+          </button>
         </div>
       )}
 

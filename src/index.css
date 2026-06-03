@@ -815,3 +815,214 @@ textarea.form-input {
     max-width: 100%;
   }
 }
+
+/* Mobile App Layout & Card List Styling */
+.mobile-contact-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 8px 0;
+}
+
+.mobile-contact-card {
+  background: #ffffff;
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  padding: 14px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+}
+
+.mobile-contact-card:hover, .mobile-contact-card:active {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08);
+  transform: translateY(-1px);
+}
+
+.mobile-contact-card.selected {
+  border-color: var(--primary-action);
+  background-color: #EFF6FF;
+}
+
+.mobile-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.mobile-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2563EB, #1D4ED8);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.mobile-card-meta {
+  flex: 1;
+  min-width: 0;
+}
+
+.mobile-card-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mobile-card-role {
+  font-size: 12px;
+  color: var(--text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-top: 2px;
+}
+
+.mobile-card-checkbox {
+  flex-shrink: 0;
+  padding: 4px;
+}
+
+.mobile-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  border-top: 1px dashed var(--border-light);
+  border-bottom: 1px dashed var(--border-light);
+  padding: 8px 0;
+}
+
+.mobile-card-info-item {
+  font-size: 12px;
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mobile-card-info-item .info-label {
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-right: 4px;
+}
+
+.mobile-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mobile-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mobile-action-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid var(--border-light);
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 12px;
+  color: var(--text-secondary);
+  transition: background-color 0.2s;
+}
+
+.mobile-action-btn:hover, .mobile-action-btn:active {
+  background-color: var(--bg-hover);
+}
+
+.mobile-action-btn.delete-btn {
+  color: #DC2626;
+  border-color: #FCA5A5;
+}
+
+.mobile-action-btn.delete-btn:hover {
+  background-color: #FEF2F2;
+}
+
+/* Floating Action Button (FAB) Styling */
+.mobile-fab-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  z-index: 1000;
+}
+
+.mobile-fab-btn {
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.mobile-fab-btn:active {
+  transform: scale(0.95);
+}
+
+.mobile-fab-btn.fab-primary {
+  width: 56px;
+  height: 56px;
+  background-color: var(--primary-action);
+  color: #ffffff;
+}
+
+.mobile-fab-btn.fab-secondary {
+  width: 44px;
+  height: 44px;
+  background-color: #ffffff;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-light);
+}
+
+/* Mobile flyout drawer styling */
+@media (max-width: 768px) {
+  .flyout-panel {
+    width: 100% !important;
+    height: 90% !important;
+    margin-top: auto;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    box-shadow: 0 -10px 25px rgba(0, 0, 0, 0.15);
+    animation: slideUp 0.3s ease-out;
+  }
+
+  .flyout-overlay {
+    align-items: flex-end;
+  }
+
+  @keyframes slideUp {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+}
