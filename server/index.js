@@ -17,11 +17,10 @@ app.use(express.json());
 
 // Initialize AI clients with keys from environment variables
 const OPENROUTER_KEY = process.env.VITE_OPENROUTER_KEY || '';
-const OPENAI_KEY = process.env.VITE_OPENAI_KEY || '';
 
 // Verify keys are loaded
-if (!OPENROUTER_KEY || !OPENAI_KEY) {
-  console.warn('⚠️  Warning: API keys not found in environment variables');
+if (!OPENROUTER_KEY) {
+  console.warn('⚠️  Warning: OpenRouter API key not found in environment variables');
 }
 
 // Health check endpoint
@@ -43,13 +42,13 @@ app.post('/api/process-cards', async (req, res) => {
     }
 
     const isAlpha = model === 'Alpha';
-    const apiKey = isAlpha ? OPENROUTER_KEY : OPENAI_KEY;
-    const baseURL = isAlpha ? 'https://openrouter.ai/api/v1' : undefined;
-    const modelIdentifier = isAlpha ? 'google/gemini-flash-latest' : 'gpt-5.5';
+    const apiKey = OPENROUTER_KEY;
+    const baseURL = 'https://openrouter.ai/api/v1';
+    const modelIdentifier = isAlpha ? 'google/gemini-flash-latest' : 'openai/gpt-5.5';
 
     if (!apiKey) {
       return res.status(503).json({
-        error: `${model} API key not configured on server`,
+        error: 'OpenRouter API key not configured on server',
       });
     }
 
