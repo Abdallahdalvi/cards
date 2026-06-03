@@ -44,7 +44,7 @@ app.post('/api/process-cards', async (req, res) => {
     const isAlpha = model === 'Alpha';
     const apiKey = OPENROUTER_KEY;
     const baseURL = 'https://openrouter.ai/api/v1';
-    const modelIdentifier = isAlpha ? 'google/gemini-2.5-flash' : 'openai/gpt-5.5';
+    const modelIdentifier = isAlpha ? 'google/gemini-3.5-flash' : 'openai/gpt-5.5';
 
     if (!apiKey) {
       return res.status(503).json({

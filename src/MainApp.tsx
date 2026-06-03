@@ -528,7 +528,7 @@ const MainApp: React.FC<MainAppProps> = ({ userId }) => {
               <div className="form-group">
                 <label className="form-label">Active Analysis Engine</label>
                 <select className="form-input" value={aiModel} onChange={e => { setAiModel(e.target.value); localStorage.setItem('dalvicard_ai_selection', e.target.value); }}>
-                  <option value="Alpha">Alpha (OpenRouter - Gemini 2.5 Flash)</option>
+                  <option value="Alpha">Alpha (OpenRouter - Gemini 3.5 Flash)</option>
                   <option value="Beta">Beta (OpenRouter - GPT-5.5)</option>
                 </select>
                 <p style={{ marginTop: 8, fontSize: 12, color: '#64748B' }}>
