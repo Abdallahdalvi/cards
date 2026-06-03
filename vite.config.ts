@@ -10,7 +10,6 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
-  base: '/DalviCard/',
   server: {
     port: 5173,
     open: true
