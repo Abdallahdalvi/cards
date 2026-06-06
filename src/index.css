@@ -619,6 +619,15 @@ textarea.form-input {
   border: 1px solid #F87171;
 }
 
+.auth-notice {
+  background: #DCFCE7;
+  color: #166534;
+  padding: 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  border: 1px solid #86EFAC;
+}
+
 .auth-footer-text {
   text-align: center;
   padding: 0 32px 32px;

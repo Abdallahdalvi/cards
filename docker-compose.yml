@@ -5,8 +5,9 @@ services:
     build:
       context: .
       args:
-        VITE_SUPABASE_URL: ${VITE_SUPABASE_URL}
+        VITE_SUPABASE_URL: ${VITE_SUPABASE_URL:-https://supabase.dalvi.cloud}
         VITE_SUPABASE_ANON_KEY: ${VITE_SUPABASE_ANON_KEY}
+        VITE_SUPABASE_PUBLISHABLE_KEY: ${VITE_SUPABASE_PUBLISHABLE_KEY}
     container_name: dalvicard_web
     ports:
       - "8099:80"

@@ -18,6 +18,7 @@ const AuthWrapper: React.FC<AuthWrapperProps> = ({ children }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [notice, setNotice] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
   // ─── Loading state ──────────────────────────────────────────────────────────
@@ -40,17 +41,18 @@ const AuthWrapper: React.FC<AuthWrapperProps> = ({ children }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setNotice('');
     setSubmitting(true);
 
     try {
-      const { error } = authMode === 'signup'
+      const result = authMode === 'signup'
         ? await signUp(email, password)
-        : await signIn(email, password);
+        : { session: null, ...(await signIn(email, password)) };
 
-      if (error) throw error;
+      if (result.error) throw result.error;
 
-      if (authMode === 'signup') {
-        setError('Check your email to confirm your account before signing in.');
+      if (authMode === 'signup' && !result.session) {
+        setNotice('Account created. Check your email to confirm your account before signing in.');
       }
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : 'Authentication failed';
@@ -62,6 +64,7 @@ const AuthWrapper: React.FC<AuthWrapperProps> = ({ children }) => {
 
   const handleGoogleSignIn = async () => {
     setError('');
+    setNotice('');
     const { error } = await signInWithGoogle();
     if (error) setError(error.message || 'Google sign-in failed');
   };
@@ -79,13 +82,13 @@ const AuthWrapper: React.FC<AuthWrapperProps> = ({ children }) => {
         <div className="auth-tabs">
           <button
             className={`auth-tab ${authMode === 'login' ? 'active' : ''}`}
-            onClick={() => { setAuthMode('login'); setError(''); }}
+            onClick={() => { setAuthMode('login'); setError(''); setNotice(''); }}
           >
             Sign In
           </button>
           <button
             className={`auth-tab ${authMode === 'signup' ? 'active' : ''}`}
-            onClick={() => { setAuthMode('signup'); setError(''); }}
+            onClick={() => { setAuthMode('signup'); setError(''); setNotice(''); }}
           >
             Sign Up
           </button>
@@ -117,6 +120,7 @@ const AuthWrapper: React.FC<AuthWrapperProps> = ({ children }) => {
           </div>
 
           {error && <div className="auth-error">{error}</div>}
+          {notice && <div className="auth-notice">{notice}</div>}
 
           <button type="submit" className="auth-submit" disabled={submitting}>
             {submitting ? (
@@ -143,7 +147,7 @@ const AuthWrapper: React.FC<AuthWrapperProps> = ({ children }) => {
           {authMode === 'login' ? "Don't have an account? " : "Already have an account? "}
           <span
             className="auth-link"
-            onClick={() => { setAuthMode(authMode === 'login' ? 'signup' : 'login'); setError(''); }}
+            onClick={() => { setAuthMode(authMode === 'login' ? 'signup' : 'login'); setError(''); setNotice(''); }}
           >
             {authMode === 'login' ? 'Sign Up' : 'Sign In'}
           </span>
