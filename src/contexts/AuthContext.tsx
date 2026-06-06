@@ -48,7 +48,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // ─── Actions ──────────────────────────────────────────────────────────────
 
   const getRedirectUrl = () => {
-    return window.location.origin + window.location.pathname;
+    return `${window.location.origin}/`;
   };
 
   const signUp = async (email: string, password: string) => {
